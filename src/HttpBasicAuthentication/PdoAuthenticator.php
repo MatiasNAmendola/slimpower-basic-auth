@@ -3,6 +3,7 @@
 /**
  * This file is part of Slim HTTP Basic Authentication middleware
  *
+ * @category   Authentication
  * @package    SlimPower
  * @subpackage BasicAuth
  * @author     Matias Nahuel Améndola <soporte.esolutions@gmail.com>
