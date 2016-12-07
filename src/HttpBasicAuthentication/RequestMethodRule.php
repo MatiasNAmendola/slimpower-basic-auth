@@ -48,6 +48,11 @@ class RequestMethodRule implements RuleInterface {
         $this->options = array_merge($this->options, $options);
     }
 
+    /**
+     * Invoke
+     * @param \SlimPower\Slim\Slim $app SlimPower instance
+     * @return boolean
+     */
     public function __invoke(\SlimPower\Slim\Slim $app) {
         $environment = \Slim\Environment::getInstance();
         return !in_array($environment["REQUEST_METHOD"], $this->options["passthrough"]);

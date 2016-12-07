@@ -27,7 +27,12 @@ class RequestPathRule implements RuleInterface
         $this->options = array_merge($this->options, $options);
     }
 
-    public function __invoke(\Slim\Slim $app)
+    /**
+     * Invoke
+     * @param \SlimPower\Slim\Slim $app SlimPower instance
+     * @return boolean
+     */
+    public function __invoke(\SlimPower\Slim\Slim $app)
     {
         $uri = $app->request->getResourceUri();
 
@@ -46,6 +51,7 @@ class RequestPathRule implements RuleInterface
                 return true;
             }
         }
+        
         return false;
     }
 }

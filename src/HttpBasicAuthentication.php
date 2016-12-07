@@ -34,7 +34,6 @@
 
 namespace SlimPower\BasicAuth;
 
-use SlimPower\BasicAuth\HttpBasicAuthentication\AuthenticatorInterface;
 use SlimPower\BasicAuth\HttpBasicAuthentication\ArrayAuthenticator;
 use SlimPower\BasicAuth\HttpBasicAuthentication\RequestMethodRule;
 use SlimPower\BasicAuth\HttpBasicAuthentication\RequestPathRule;
@@ -45,10 +44,10 @@ class HttpBasicAuthentication extends \Slim\Middleware {
     private $options = array(
         "secure" => true,
         "relaxed" => array("localhost", "127.0.0.1"),
+        "environment" => "HTTP_AUTHORIZATION",
         "users" => null,
         "path" => null,
         "realm" => "Protected",
-        "environment" => "HTTP_AUTHORIZATION",
         "authenticator" => null,
         "callback" => null,
         "error" => null

@@ -36,5 +36,10 @@ namespace SlimPower\BasicAuth\HttpBasicAuthentication;
 
 interface RuleInterface {
 
+    /**
+     * Invoke
+     * @param \SlimPower\Slim\Slim $app SlimPower instance
+     * @return boolean
+     */
     public function __invoke(\SlimPower\Slim\Slim $app);
 }
