@@ -40,7 +40,12 @@ use SlimPower\Authentication\Interfaces\AuthenticatorInterface;
 class PdoAuthenticator implements AuthenticatorInterface {
 
     private $options;
+    private $data = array();
     private $error = null;
+
+    public function getData() {
+        return $this->data;
+    }
 
     public function getError() {
         return $this->error;
@@ -52,7 +57,8 @@ class PdoAuthenticator implements AuthenticatorInterface {
         $this->options = array(
             "table" => "users",
             "user" => "user",
-            "hash" => "hash"
+            "hash" => "hash",
+            "show" => array() /* fields to show */
         );
 
         if ($options) {
@@ -79,6 +85,14 @@ class PdoAuthenticator implements AuthenticatorInterface {
 
         if (!$success) {
             $this->error = new \SlimPower\Authentication\Error();
+        } else {
+            $this->data = array();
+
+            foreach ($this->options["show"] as $fieldname) {
+                if (array_key_exists($fieldname, $user)) {
+                    $this->data[$fieldname] = $user[$fieldname];
+                }
+            }
         }
 
         return $success;

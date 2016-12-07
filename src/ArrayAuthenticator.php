@@ -40,7 +40,12 @@ use SlimPower\Authentication\Interfaces\AuthenticatorInterface;
 class ArrayAuthenticator implements AuthenticatorInterface {
 
     public $options;
+    private $data = array();
     private $error = null;
+
+    public function getData() {
+        return $this->data;
+    }
 
     public function getError() {
         return $this->error;
@@ -65,6 +70,8 @@ class ArrayAuthenticator implements AuthenticatorInterface {
 
         if (!$success) {
             $this->error = new \SlimPower\Authentication\Error();
+        } else {
+            $this->data = array('user' => $user);
         }
 
         return $success;
