@@ -40,6 +40,10 @@ use SlimPower\Authentication\Interfaces\AuthenticatorInterface;
 class PdoAuthenticator implements AuthenticatorInterface {
 
     private $options;
+    
+    public function getError() {
+        return new \SlimPower\Authentication\Error();
+    }
 
     public function __construct(array $options = array()) {
 

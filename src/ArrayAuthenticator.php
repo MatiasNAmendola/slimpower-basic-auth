@@ -40,6 +40,10 @@ use SlimPower\Authentication\Interfaces\AuthenticatorInterface;
 class ArrayAuthenticator implements AuthenticatorInterface {
 
     public $options;
+    
+    public function getError() {
+        return new \SlimPower\Authentication\Error();
+    }
 
     public function __construct($options = null) {
 
