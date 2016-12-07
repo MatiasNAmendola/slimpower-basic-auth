@@ -5,7 +5,7 @@
  *
  * @category   Authentication
  * @package    SlimPower
- * @subpackage BasicAuth
+ * @subpackage HttpBasicAuthentication
  * @author     Matias Nahuel Améndola <soporte.esolutions@gmail.com>
  * @link       https://github.com/MatiasNAmendola/slimpower-basic-auth
  * @license    https://github.com/MatiasNAmendola/slimpower-basic-auth/blob/master/LICENSE.md
@@ -33,11 +33,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace SlimPower\BasicAuth;
-
-use SlimPower\BasicAuth\HttpBasicAuthentication\ArrayAuthenticator;
-use SlimPower\BasicAuth\HttpBasicAuthentication\RequestMethodRule;
-use SlimPower\BasicAuth\HttpBasicAuthentication\RequestPathRule;
+namespace SlimPower\HttpBasicAuthentication;
 
 class HttpBasicAuthentication extends \Slim\Middleware {
 

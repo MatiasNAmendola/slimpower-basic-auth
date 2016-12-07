@@ -5,7 +5,7 @@
  *
  * @category   Authentication
  * @package    SlimPower
- * @subpackage BasicAuth
+ * @subpackage HttpBasicAuthentication
  * @author     Matias Nahuel Améndola <soporte.esolutions@gmail.com>
  * @link       https://github.com/MatiasNAmendola/slimpower-basic-auth
  * @license    https://github.com/MatiasNAmendola/slimpower-basic-auth/blob/master/LICENSE.md

@@ -5,7 +5,7 @@
  *
  * @category   Authentication
  * @package    SlimPower
- * @subpackage BasicAuth
+ * @subpackage HttpBasicAuthentication
  * @author     Matias Nahuel Améndola <soporte.esolutions@gmail.com>
  * @link       https://github.com/MatiasNAmendola/slimpower-basic-auth
  * @license    https://github.com/MatiasNAmendola/slimpower-basic-auth/blob/master/LICENSE.md
@@ -33,28 +33,44 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace SlimPower\BasicAuth\HttpBasicAuthentication;
+namespace SlimPower\HttpBasicAuthentication;
 
-class ArrayAuthenticator implements AuthenticatorInterface {
+class RequestPathRule implements RuleInterface {
 
-    public $options;
+    protected $options = array(
+        "path" => array("/"),
+        "passthrough" => array()
+    );
 
-    public function __construct($options = null) {
-
-        /* Default options. */
-        $this->options = array(
-            "users" => array()
-        );
-
-        if ($options) {
-            $this->options = array_merge($this->options, (array) $options);
-        }
+    public function __construct($options = array()) {
+        $this->options = array_merge($this->options, $options);
     }
 
-    public function __invoke(array $arguments) {
-        $user = $arguments["user"];
-        $password = $arguments["password"];
-        return isset($this->options["users"][$user]) && $this->options["users"][$user] === $password;
+    /**
+     * Invoke
+     * @param \SlimPower\Slim\Slim $app SlimPower instance
+     * @return boolean
+     */
+    public function __invoke(\SlimPower\Slim\Slim $app) {
+        $uri = $app->request->getResourceUri();
+
+        /* If request path is matches passthrough should not authenticate. */
+        foreach ((array) $this->options["passthrough"] as $passthrough) {
+            $passthrough = rtrim($passthrough, "/");
+            if (!!preg_match("@^{$passthrough}(/.*)?$@", $uri)) {
+                return false;
+            }
+        }
+
+        /* Otherwise check if path matches and we should authenticate. */
+        foreach ((array) $this->options["path"] as $path) {
+            $path = rtrim($path, "/");
+            if (!!preg_match("@^{$path}(/.*)?$@", $uri)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SlimPower\\BasicAuth\\": "src"
+            "SlimPower\\HttpBasicAuthentication\\": "src"
         }
     }
 }
