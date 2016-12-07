@@ -35,6 +35,8 @@
 
 namespace SlimPower\HttpBasicAuthentication;
 
+use SlimPower\Authentication\Interfaces\AuthenticatorInterface;
+
 class PdoAuthenticator implements AuthenticatorInterface {
 
     private $options;
