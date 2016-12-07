@@ -51,7 +51,8 @@ class HttpBasicAuthentication extends \Slim\Middleware {
         "realm" => "Protected",
         "authenticator" => null,
         "callback" => null,
-        "error" => null
+        "error" => null,
+        "warningPaths" => null
     );
 
     public function __construct($options = array()) {
@@ -109,24 +110,35 @@ class HttpBasicAuthentication extends \Slim\Middleware {
             }
         }
 
-        /* Just in case. */
-        $user = false;
-        $password = false;
+        $uri = $this->app->request->getResourceUri();
 
-        /* If using PHP in CGI mode. */
-        if (isset($_SERVER[$this->options["environment"]])) {
-            if (preg_match("/Basic\s+(.*)$/i", $_SERVER[$this->options["environment"]], $matches)) {
-                list($user, $password) = explode(":", base64_decode($matches[1]));
+        $freePass = false;
+
+        /* If request path is matches warningPaths should not authenticate. */
+        foreach ((array) $this->options["warningPaths"] as $warningPaths) {
+            $warningPaths = rtrim($warningPaths, "/");
+            if (!!preg_match("@^{$warningPaths}(/.*)?$@", $uri)) {
+                $freePass = true;
             }
-        } else {
-            $user = $environment["PHP_AUTH_USER"];
-            $password = $environment["PHP_AUTH_PW"];
         }
 
-        $params = array("user" => $user, "password" => $password);
+        /* If userdata cannot be found return with 401 Unauthorized. */
+        if ((false === $userdata = $this->fetchUserdata()) && !$freePass) {
+            $this->app->response->status(401);
+            $this->app->response->header("WWW-Authenticate", sprintf('Basic realm="%s"', $this->options["realm"]));
+            $this->error(array(
+                "message" => "Authentication failed"
+            ));
+            return;
+        }
+
+        if (false === $userdata && $freePass) {
+            $this->next->call();
+            return;
+        }
 
         /* Check if user authenticates. */
-        if (false === $this->options["authenticator"]($params)) {
+        if (false === $this->options["authenticator"]($userdata)) {
             $this->app->response->status(401);
             $this->app->response->header("WWW-Authenticate", sprintf('Basic realm="%s"', $this->options["realm"]));
             $this->error(array(
@@ -147,9 +159,38 @@ class HttpBasicAuthentication extends \Slim\Middleware {
             }
         }
 
-
         /* Everything ok, call next middleware. */
         $this->next->call();
+    }
+
+    /**
+     * Fetch the userdata
+     *
+     * @return array|false Userdata or false if not found.
+     */
+    public function fetchUserdata() {
+        $environment = $this->app->environment;
+        $user = false;
+        $password = false;
+
+        /* If using PHP in CGI mode. */
+        if (isset($_SERVER[$this->options["environment"]])) {
+            $matches = null;
+
+            if (preg_match("/Basic\s+(.*)$/i", $_SERVER[$this->options["environment"]], $matches)) {
+                list($user, $password) = explode(":", base64_decode($matches[1]));
+            }
+        } else {
+            $user = $environment["PHP_AUTH_USER"];
+            $password = $environment["PHP_AUTH_PW"];
+        }
+
+        if (empty($user) || empty($password)) {
+            return false;
+        }
+
+        $params = array("user" => $user, "password" => $password);
+        return $params;
     }
 
     private function hydrate($data = array()) {
@@ -320,7 +361,7 @@ class HttpBasicAuthentication extends \Slim\Middleware {
         foreach ($rules as $callable) {
             $this->addRule($callable);
         }
-        
+
         return $this;
     }
 
