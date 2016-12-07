@@ -40,9 +40,10 @@ use SlimPower\Authentication\Interfaces\AuthenticatorInterface;
 class ArrayAuthenticator implements AuthenticatorInterface {
 
     public $options;
-    
+    private $error = null;
+
     public function getError() {
-        return new \SlimPower\Authentication\Error();
+        return $this->error;
     }
 
     public function __construct($options = null) {
@@ -60,7 +61,13 @@ class ArrayAuthenticator implements AuthenticatorInterface {
     public function __invoke(array $arguments) {
         $user = $arguments["user"];
         $password = $arguments["password"];
-        return isset($this->options["users"][$user]) && $this->options["users"][$user] === $password;
+        $success = isset($this->options["users"][$user]) && $this->options["users"][$user] === $password;
+
+        if (!$success) {
+            $this->error = new \SlimPower\Authentication\Error();
+        }
+
+        return $success;
     }
 
 }

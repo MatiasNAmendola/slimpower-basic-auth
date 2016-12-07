@@ -40,9 +40,10 @@ use SlimPower\Authentication\Interfaces\AuthenticatorInterface;
 class PdoAuthenticator implements AuthenticatorInterface {
 
     private $options;
-    
+    private $error = null;
+
     public function getError() {
-        return new \SlimPower\Authentication\Error();
+        return $this->error;
     }
 
     public function __construct(array $options = array()) {
@@ -70,11 +71,17 @@ class PdoAuthenticator implements AuthenticatorInterface {
         $statement = $this->options["pdo"]->prepare($sql);
         $statement->execute(array($user));
 
+        $success = false;
+
         if ($user = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            return password_verify($password, $user[$this->options["hash"]]);
+            $success = password_verify($password, $user[$this->options["hash"]]);
         }
 
-        return false;
+        if (!$success) {
+            $this->error = new \SlimPower\Authentication\Error();
+        }
+
+        return $success;
     }
 
     public function sql() {
