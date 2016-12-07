@@ -35,15 +35,14 @@
 
 namespace SlimPower\BasicAuth\HttpBasicAuthentication;
 
-class RequestPathRule implements RuleInterface
-{
+class RequestPathRule implements RuleInterface {
+
     protected $options = array(
         "path" => array("/"),
         "passthrough" => array()
     );
 
-    public function __construct($options = array())
-    {
+    public function __construct($options = array()) {
         $this->options = array_merge($this->options, $options);
     }
 
@@ -52,12 +51,11 @@ class RequestPathRule implements RuleInterface
      * @param \SlimPower\Slim\Slim $app SlimPower instance
      * @return boolean
      */
-    public function __invoke(\SlimPower\Slim\Slim $app)
-    {
+    public function __invoke(\SlimPower\Slim\Slim $app) {
         $uri = $app->request->getResourceUri();
 
         /* If request path is matches passthrough should not authenticate. */
-        foreach ((array)$this->options["passthrough"] as $passthrough) {
+        foreach ((array) $this->options["passthrough"] as $passthrough) {
             $passthrough = rtrim($passthrough, "/");
             if (!!preg_match("@^{$passthrough}(/.*)?$@", $uri)) {
                 return false;
@@ -65,13 +63,14 @@ class RequestPathRule implements RuleInterface
         }
 
         /* Otherwise check if path matches and we should authenticate. */
-        foreach ((array)$this->options["path"] as $path) {
+        foreach ((array) $this->options["path"] as $path) {
             $path = rtrim($path, "/");
             if (!!preg_match("@^{$path}(/.*)?$@", $uri)) {
                 return true;
             }
         }
-        
+
         return false;
     }
+
 }
