@@ -52,7 +52,7 @@ class HttpBasicAuthentication extends AbstractAuthentication {
 
         /* If array of users was passed in options create an authenticator */
         if (is_array($this->options["users"])) {
-            $this->options["authenticator"] = new ArrayAuthenticator(array(
+            $this->options["authenticator"] = new ArrayAuthenticator($this->app, array(
                 "users" => $this->options["users"]
             ));
         }
