@@ -36,6 +36,7 @@
 namespace SlimPower\HttpBasicAuthentication;
 
 use SlimPower\Authentication\AbstractAuthentication;
+use SlimPower\Authentication\ArrayAuthenticator;
 
 class HttpBasicAuthentication extends AbstractAuthentication {
 
