@@ -35,10 +35,10 @@
 
 namespace SlimPower\HttpBasicAuthentication;
 
-use SlimPower\Authentication\AbstractAuthentication;
-use SlimPower\Authentication\ArrayAuthenticator;
+use SlimPower\Authentication\Abstracts\AuthenticationMiddleware;
+use SlimPower\Authentication\Callables\ArrayAuthenticator;
 
-class HttpBasicAuthentication extends AbstractAuthentication {
+class HttpBasicAuthentication extends AuthenticationMiddleware {
 
     protected function setOptions($options = array()) {
         parent::setOptions($options);
