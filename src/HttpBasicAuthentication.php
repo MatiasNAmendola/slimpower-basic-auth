@@ -58,9 +58,9 @@ class HttpBasicAuthentication extends AbstractAuthentication {
         }
     }
 
-    protected function showError() {
+    public function callError() {
         $this->app->response->header("WWW-Authenticate", sprintf('Basic realm="%s"', $this->options["realm"]));
-        parent::showError();
+        parent::callError();
     }
 
     /**
