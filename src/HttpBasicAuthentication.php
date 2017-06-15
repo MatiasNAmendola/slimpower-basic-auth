@@ -35,41 +35,13 @@
 
 namespace SlimPower\HttpBasicAuthentication;
 
-use SlimPower\Authentication\Abstracts\AuthenticationMiddleware;
-use SlimPower\Authentication\Callables\ArrayAuthenticator;
+use SlimPower\Authentication\Abstracts\LoginAuthMiddleware;
 
-class HttpBasicAuthentication extends AuthenticationMiddleware {
-
-    protected function setOptions($options = array()) {
-        parent::setOptions($options);
-
-        $base = array(
-            "users" => null,
-            "realm" => "Protected"
-        );
-
-        $this->options = array_replace_recursive($base, $this->options);
-
-        /* If array of users was passed in options create an authenticator */
-        if (is_array($this->options["users"])) {
-            $this->options["authenticator"] = new ArrayAuthenticator($this->app, array(
-                "users" => $this->options["users"]
-            ));
-        }
-    }
+class HttpBasicAuthentication extends LoginAuthMiddleware {
 
     public function callError() {
         $this->app->response->header("WWW-Authenticate", sprintf('Basic realm="%s"', $this->options["realm"]));
         parent::callError();
-    }
-
-    /**
-     * Get Params
-     * @return array Params
-     */
-    protected function getParams() {
-        $params = array("app" => $this->app);
-        return $params;
     }
 
     /**
@@ -98,25 +70,8 @@ class HttpBasicAuthentication extends AuthenticationMiddleware {
             return false;
         }
 
-        $params = array("user" => $user, "password" => $password);
+        $params = array(parent::KEY_USERNAME => $user, parent::KEY_PASSWORD => $password);
         return $params;
-    }
-
-    public function getUsers() {
-        return $this->options["users"];
-    }
-
-    public function getPath() {
-        return $this->options["path"];
-    }
-
-    public function getRealm() {
-        return $this->options["realm"];
-    }
-
-    public function setRealm($realm) {
-        $this->options["realm"] = $realm;
-        return $this;
     }
 
 }
