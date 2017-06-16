@@ -1,7 +1,7 @@
-#SlimPower - HTTP Basic Authentication
+# SlimPower - HTTP Basic Authentication
 
 [![Latest version][ico-version]][link-packagist]
-[comment]: # ([![Total Downloads][ico-downloads]][link-downloads])
+[![Total Downloads][ico-downloads]][link-downloads]
 
 [![Latest Stable Version](https://poser.pugx.org/matiasnamendola/slimpower-basic-auth/version?format=flat-square)](https://packagist.org/packages/matiasnamendola/slimpower-basic-auth) 
 [![Latest Unstable Version](https://poser.pugx.org/matiasnamendola/slimpower-basic-auth/v/unstable?format=flat-square)](//packagist.org/packages/matiasnamendola/slimpower-basic-auth) 
@@ -12,7 +12,7 @@
 
 HTTP Basic Authentication Middleware for SlimPower Framework
 
-##Installation
+## Installation
 
 In terminal:
 
@@ -30,18 +30,13 @@ Or you can add use this as your composer.json:
 }
 ```
 
-##Security
-
-If you discover any security related issues, please email [soporte.esolutions@gmail.com](mailto:soporte.esolutions@gmail.com?subject=[SECURITY] Config Security Issue) instead of using the issue tracker.
-
-
-##Credits
+## Credits
 
 - [Matías Nahuel Améndola](https://github.com/matiasnamendola)
 - [Franco Soto](https://github.com/francosoto)
 
 
-##License
+## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
